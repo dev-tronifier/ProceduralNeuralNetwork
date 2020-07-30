@@ -23,6 +23,11 @@ void read_mnist(char* path) {
 	int mag_no = 0, n_images = 0, n_cols = 0, n_rows = 0;
 
 	READ(mag_no, fptr);
+
+	if(mag_no != 2051) {
+
+	}
+
 	READ(n_images, fptr);
 	READ(n_rows, fptr);
 	READ(n_cols, fptr);
