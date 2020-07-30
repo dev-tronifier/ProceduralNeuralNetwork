@@ -4,11 +4,10 @@ COMPILE_OBJ = gcc -Wall -c -o $@ $<
 MAIN = test/main.c
 HEADERS = include/*
 CFILES = src/*
-OBJ = nn.o
+OBJ = NN
 
 all:
-	$(COMPILE_PRG) $(OBJ) $(MAIN) $(HEADER) $(CFILES)
-	rm include/*.gch
+	$(COMPILE_PRG) $(OBJ) $(MAIN) $(HEADERS) $(CFILES)
 
 clean:
-	rm nn.o
+	rm $(OBJ)
