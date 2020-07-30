@@ -11,6 +11,35 @@
 
 #define ERROR(FMT, ...) fprintf(stderr, FMT, ##__VA_ARGS__)
 
+/**
+ * Currently the support for cplusplus is not done but is handled by the default
+ * The support will be done in future when the need arrives.
+ */
+#if defined(__clang__)
+# ifndef __has_extension
+#  define __has_extension __has_feature
+# endif
+# if __has_extension(cxx_static_assert)
+#  define NN_StaticAssert(COND, MSG) static_assert((COND), MSG " " #COND)
+# elif __has_extension(c_static_assert)
+#  define NN_StaticAssert(COND, MSG) _Static_assert((COND), MSG " " #COND)
+# endif
+#elif defined(__GNUC__)
+# if(__STDC_VERSION__ >= 201112L)
+#  include <assert.h>
+#  define NN_StaticAssert(COND, MSG) static_assert((COND), MSG " " #COND)
+# endif
+#endif
+#ifndef NN_StaticAssert
+# if !defined(__clang__) && defined(__GNUC__) && (__GNUC__*100 + __GNUC_MINOR__ > 302)
+#  define NN_StaticAssert(COND, MSG) ({                                                 \
+        extern int                                                                      \
+        __attribute__((error("NN_StaticAssert: " MSG ": " #COND))) NN_StaticAssert();   \
+        ((COND) ? 0 : NN_StaticAssert()); })
+# endif
+#endif
+
+
 #define __ARGS_INTER(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...) N
 #define __ARGS(...) __ARGS_INTER(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 
